@@ -1,0 +1,17 @@
+{
+    "name": "upbond/gmo-payment",
+    "description": "gmo-payment",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shu",
+            "email": "shu@gineign.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Gineign\\GmoPayment\\": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
