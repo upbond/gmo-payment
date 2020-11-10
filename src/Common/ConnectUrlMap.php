@@ -68,7 +68,7 @@ class ConnectUrlMap
         }
         // realpath(dirname(__FILE__)."/../../../../conf/connector.properties")
         // $prop = parse_ini_file(realpath(dirname(__FILE__)."/../../../../conf/connector.properties"));
-        $prop = parse_ini_file(realpath(dirname(__FILE__) . "/../../../../" . $prop_path));
+        $prop = parse_ini_file(realpath(dirname(__FILE__) . "/../" . $prop_path));
 
         // 読込処理の結果がnullの場合、処理を打ち切る。
         if (is_null($prop)) {
