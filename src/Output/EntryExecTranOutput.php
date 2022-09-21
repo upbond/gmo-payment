@@ -2,6 +2,12 @@
 
 namespace Gineign\GmoPayment\Output;
 
+use Gineign\GmoPayment\Output\EntryTranOutput;
+use Gineign\GmoPayment\Output\ExecTranOutput;
+
+/*require_once 'com/gmo_pg/client/output/EntryTranOutput.php';
+require_once 'com/gmo_pg/client/output/ExecTranOutput.php';*/
+
 /**
  * <b>取引登録・決済一括実行  出力パラメータクラス</b>
  *
@@ -46,32 +52,12 @@ class EntryExecTranOutput
     }
 
     /**
-     * 取引登録出力パラメータ設定
-     *
-     * @param EntryTranOutput $entryTranOutput 取引登録出力パラメータ
-     */
-    public function setEntryTranOutput(&$entryTranOutput)
-    {
-        $this->entryTranOutput = $entryTranOutput;
-    }
-
-    /**
      * 決済実行出力パラメータ取得
      * @return ExecTranOutput 決済実行出力パラメータ
      */
     public function &getExecTranOutput()
     {
         return $this->execTranOutput;
-    }
-
-    /**
-     * 決済実行出力パラメータ設定
-     *
-     * @param ExecTranOutput $execTranOutput 決済実行出力パラメータ
-     */
-    public function setExecTranOutput(&$execTranOutput)
-    {
-        $this->execTranOutput = $execTranOutput;
     }
 
     /**
@@ -135,6 +121,15 @@ class EntryExecTranOutput
     public function getApprovalNo()
     {
         return $this->execTranOutput->getApprovalNo();
+    }
+
+    /**
+     * 3Dセキュアフラグ取得
+     * @return string 3Dセキュアフラグ
+     */
+    public function getSecureFlag()
+    {
+        return $this->execTranOutput->getSecureFlag();
     }
 
     /**
@@ -228,6 +223,34 @@ class EntryExecTranOutput
     }
 
     /**
+     * ActiveServerへのリダイレクトURL取得
+     */
+    public function getRedirectUrl()
+    {
+        return $this->execTranOutput->getRedirectUrl();
+    }
+
+    /**
+     * 取引登録出力パラメータ設定
+     *
+     * @param EntryTranOutput $entryTranOutput 取引登録出力パラメータ
+     */
+    public function setEntryTranOutput(&$entryTranOutput)
+    {
+        $this->entryTranOutput = $entryTranOutput;
+    }
+
+    /**
+     * 決済実行出力パラメータ設定
+     *
+     * @param ExecTranOutput $execTranOutput 決済実行出力パラメータ
+     */
+    public function setExecTranOutput(&$execTranOutput)
+    {
+        $this->execTranOutput = $execTranOutput;
+    }
+
+    /**
      * 取引ID設定
      *
      * @param string accessId 取引ID
@@ -283,6 +306,15 @@ class EntryExecTranOutput
     public function setApprovalNo($approvalNo)
     {
         $this->execTranOutput->setApprovalNo($approvalNo);
+    }
+
+    /**
+     * 3Dセキュアフラグ設定
+     * @param string $flag 3Dセキュアフラグ
+     */
+    public function setSecureFlag($flag)
+    {
+        $this->execTranOutput->setSecureFlag($flag);
     }
 
     /**
@@ -395,6 +427,14 @@ class EntryExecTranOutput
     }
 
     /**
+     * ActiveServerへのリダイレクトURLを設定
+     */
+    public function setRedirectUrl($redirectUrl)
+    {
+        $this->execTranOutput->setRedirectUrl($redirectUrl);
+    }
+
+    /**
      * 取引登録エラーリスト取得
      * @return  array エラーリスト
      */
@@ -410,15 +450,6 @@ class EntryExecTranOutput
     public function &getExecErrList()
     {
         return $this->execTranOutput->getErrList();
-    }
-
-    /**
-     * エラー発生判定
-     * @return boolean エラー発生有無(true=エラー発生)
-     */
-    public function isErrorOccurred()
-    {
-        return $this->isEntryErrorOccurred() || $this->isExecErrorOccurred();
     }
 
     /**
@@ -442,6 +473,15 @@ class EntryExecTranOutput
     }
 
     /**
+     * エラー発生判定
+     * @return boolean エラー発生有無(true=エラー発生)
+     */
+    public function isErrorOccurred()
+    {
+        return $this->isEntryErrorOccurred() || $this->isExecErrorOccurred();
+    }
+
+    /**
      * 3Dセキュア判定
      * @return boolean 3Dセキュア実行要否フラグ(true=3Dセキュア実行要)
      */
@@ -450,6 +490,14 @@ class EntryExecTranOutput
         return $this->execTranOutput->isTdSecure();
     }
 
+    /**
+     * 3Dセキュア2.0判定
+     * @return boolean 3Dセキュア2.0実行要否フラグ(true=3Dセキュア2.0実行要)
+     */
+    public function isTdSecure2()
+    {
+        return $this->execTranOutput->isTdSecure2();
+    }
 }
 
 ?>

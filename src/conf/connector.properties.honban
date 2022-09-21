@@ -2,7 +2,9 @@ EntryTran=https://p01.mul-pay.jp/payment/EntryTran.idPass
 ExecTran=https://p01.mul-pay.jp/payment/ExecTran.idPass
 AlterTran=https://p01.mul-pay.jp/payment/AlterTran.idPass
 TdVerify=https://p01.mul-pay.jp/payment/SecureTran.idPass
+TdVerify2=https://pt01.mul-pay.jp/payment/SecureTran2.idPass
 ChangeTran=https://p01.mul-pay.jp/payment/ChangeTran.idPass
+Tds2Auth=https://pt01.mul-pay.jp/payment/Tds2Auth.idPass
 
 SaveCard=https://p01.mul-pay.jp/payment/SaveCard.idPass
 DeleteCard=https://p01.mul-pay.jp/payment/DeleteCard.idPass

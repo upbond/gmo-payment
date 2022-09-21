@@ -21,8 +21,8 @@ use Gineign\GmoPayment\Common\ParamParser;
 class BaseTran
 {
 
-    private $user = 'MODP-3.110.158';
-    private $version = '158';
+    private $user = 'MODP-3.110.178';
+    private $version = '178';
 
     /**
      * @var Gmopg_Log 独自ログクラス
@@ -40,114 +40,6 @@ class BaseTran
     public function __construct()
     {
         $this->log = new Gmopg_Log(get_class($this));
-    }
-
-    /**
-     * 例外の発生を判定する
-     *
-     * @return boolean 判定結果(true = 例外発生)
-     */
-    public function isExceptionOccured()
-    {
-        return false == is_null($this->exception);
-    }
-
-    /**
-     * 例外を返す
-     *
-     * @return  GPayException 例外
-     */
-    public function &getException()
-    {
-        return $this->exception;
-    }
-
-    /**
-     * プロトコルタイプを呼び出し、結果を返す。
-     * 呼び出し先のURLはクラス名をもとに取得する。
-     *
-     * @param string $params プロトコルタイプへ送信するパラメータ文字列
-     * @return IgnoreCaseMap 出力パラメータマップ
-     * @exception GPayException
-     */
-    protected function callProtocol($params)
-    {
-        // URLを取得
-        $urlMap = new ConnectUrlMap();
-        // $key = get_class($this);
-        $arr = explode('\\', get_class($this));
-        $key = end($arr);
-        $url = $urlMap->getUrl($key);
-
-        $this->log->debug("キー値 : $key  取得URL : $url パラメータ ： $params");
-
-
-        // URLを取得できなかったときはエラーとする
-        if (is_null($url)) {
-            $this->exception =
-                new GPayException("呼び出し先のURLを取得できませんでした。[$key]", $this->exception);
-            return null;
-        }
-
-        //更新者として、製品バージョンを設定
-        return $this->callProtocol_($url, $params . '&User=' . $this->user . '&Version=' . $this->version);
-    }
-
-    /**
-     * プロトコルタイプを呼び出し、結果を返す。
-     *
-     * @param string $url プロトコルタイプへのURL文字列
-     * @param string $params プロトコルタイプへ送信するパラメータ文字列
-     * @return IgnoreCaseMap 出力パラメータマップ
-     * @exception GPayException
-     */
-    protected function callProtocol_($url, $params)
-    {
-
-        // プロトコルタイプのURLへの接続
-        $urlConnect = $this->connect($url);
-
-        // データの送信
-        $retData = $this->sendData($urlConnect, $params);
-
-        // 戻り値の取り出し
-        $retData = $this->recvData($retData);
-
-        // プロトコルタイプのURLへの接続を解除
-        $this->disconnect($urlConnect);
-
-        $this->log->debug("戻り値 : $retData");
-
-        if (!$retData) {
-            return null;
-        }
-
-        // 戻り値を解析
-        $parser = new ParamParser();
-        if (
-            mb_strpos($url, "ListVirtualaccount") != false ||
-            mb_strpos($url, "InquiryVirtualaccountTransfer") != false ||
-            mb_strpos($url, "InquiryTransferGANB") != false
-        ) {
-            $resultMap = $parser->parseCsv($retData);
-        } else if (mb_strpos($url, "ExecTran.idPass") === false
-            && mb_strpos($url, "ExecTranVPreCa.idPass") === false
-            && mb_strpos($url, "ExecTranLimited.idPass") === false) {
-            // ExecTran（カード系）の呼び出しではない
-            $resultMap = $parser->parse($retData);
-        } else {
-            // ExecTran（カード系）の呼び出しである
-            if (mb_strpos($retData, "ACS=1") === false) {
-                //ACS=1ではない場合は通常のパースを行う
-                $resultMap = $parser->parse($retData);
-            } else {
-                // EntryTranの呼び出し、かつ、ACS=1である場合、特殊パースを行う（3DS用URLの仕様変更のため）
-                $resultMap = $parser->execSpecialParse($retData);
-            }
-        }
-        $resultMap = new IgnoreCaseMap($resultMap);
-
-        return $resultMap;
     }
 
     /**
@@ -197,6 +89,18 @@ class BaseTran
         }
 
         return $urlConnect;
+    }
+
+    /**
+     * プロトコルタイプのURLへの接続を解除する。
+     *
+     * @param mixed $urlConnect プロトコルタイプへのURL接続
+     */
+    protected function disconnect(&$urlConnect)
+    {
+        if ($urlConnect) {
+            curl_close($urlConnect);
+        }
     }
 
     /**
@@ -251,15 +155,120 @@ class BaseTran
     }
 
     /**
-     * プロトコルタイプのURLへの接続を解除する。
+     * プロトコルタイプを呼び出し、結果を返す。
      *
-     * @param mixed $urlConnect プロトコルタイプへのURL接続
+     * @param string $url プロトコルタイプへのURL文字列
+     * @param string $params プロトコルタイプへ送信するパラメータ文字列
+     * @return IgnoreCaseMap 出力パラメータマップ
+     * @exception GPayException
      */
-    protected function disconnect(&$urlConnect)
+    protected function callProtocol_($url, $params)
     {
-        if ($urlConnect) {
-            curl_close($urlConnect);
+
+        // プロトコルタイプのURLへの接続
+        $urlConnect = $this->connect($url);
+
+        // データの送信
+        $retData = $this->sendData($urlConnect, $params);
+
+        // if(strstr($url,'payment/SecureTran2.idPass')){
+        //     dd($retData);
+        // }
+
+        // 戻り値の取り出し
+        $retData = $this->recvData($retData);
+
+        // プロトコルタイプのURLへの接続を解除
+        $this->disconnect($urlConnect);
+
+        $this->log->debug("戻り値 : $retData");
+
+        if (!$retData) {
+            return null;
         }
+
+        // 戻り値を解析
+        $parser = new ParamParser();
+        if (
+            mb_strpos($url, "ListVirtualaccount") != false ||
+            mb_strpos($url, "InquiryVirtualaccountTransfer") != false ||
+            mb_strpos($url, "InquiryTransferGANB") != false
+        ) {
+            $resultMap = $parser->parseCsv($retData);
+        } else if (mb_strpos($url, "ExecTran.idPass") === false
+            && mb_strpos($url, "ExecTranVPreCa.idPass") === false
+            && mb_strpos($url, "ExecTranLimited.idPass") === false) {
+            // ExecTran（カード系）の呼び出しではない
+            $resultMap = $parser->parse($retData);
+        } else {
+            // ExecTran（カード系）の呼び出しである
+            if (mb_strpos($retData, "ACS=1") === false) {
+                if (mb_strpos($retData, "ACS=2") === false) {
+                    //ACS=1or2ではない場合は通常のパースを行う
+                    $resultMap = $parser->parse($retData);
+                } else {
+                    // EntryTranの呼び出し、かつ、ACS=2である場合、3DS2.0用の特殊パースを行う
+                    $resultMap = $parser->execSpecialParse2($retData);
+                }
+            } else {
+                // EntryTranの呼び出し、かつ、ACS=1である場合、特殊パースを行う（3DS用URLの仕様変更のため）
+                $resultMap = $parser->execSpecialParse($retData);
+            }
+        }
+        $resultMap = new IgnoreCaseMap($resultMap);
+
+        return $resultMap;
+    }
+
+    /**
+     * プロトコルタイプを呼び出し、結果を返す。
+     * 呼び出し先のURLはクラス名をもとに取得する。
+     *
+     * @param string $params プロトコルタイプへ送信するパラメータ文字列
+     * @return IgnoreCaseMap 出力パラメータマップ
+     * @exception GPayException
+     */
+    protected function callProtocol($params)
+    {
+        // URLを取得
+        $urlMap = new ConnectUrlMap();
+        // $key = get_class($this); 
+        $arr = explode('\\', get_class($this));
+        $key = end($arr);
+        $url = $urlMap->getUrl($key);
+
+        $this->log->debug("キー値 : $key  取得URL : $url パラメータ ： $params");
+
+
+        // URLを取得できなかったときはエラーとする
+        if (is_null($url)) {
+            $this->exception =
+                new GPayException("呼び出し先のURLを取得できませんでした。[$key]", $this->exception);
+            return null;
+        }
+
+        //更新者として、製品バージョンを設定
+        return $this->callProtocol_($url, $params . '&User=' . $this->user . '&Version=' . $this->version);
+    }
+
+    /**
+     * 例外の発生を判定する
+     *
+     * @return boolean 判定結果(true = 例外発生)
+     */
+    public function isExceptionOccured()
+    {
+        return false == is_null($this->exception);
+    }
+
+    /**
+     * 例外を返す
+     *
+     * @return  GPayException 例外
+     */
+    public function &getException()
+    {
+        return $this->exception;
     }
 
 }

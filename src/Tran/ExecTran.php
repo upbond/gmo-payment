@@ -33,9 +33,11 @@ class ExecTran extends BaseTran
      */
     public function exec(&$input)
     {
+        // dd($input->toString());
         // プロトコル呼び出し・結果取得
+        // $inputString="AccessID={$input->getAccessId()}&AccessPass={$input->getAccessPass()}&OrderID={$input->getOrderId()}&Method=1&Token={$input->getToken()}&TdRequired=1&Tds2ChallengeIndType=1&CallbackType=3&RetUrl=http://127.0.0.1:8000/shop/gmo/retUrl";
+        // $resultMap = $this->callProtocol($inputString);
         $resultMap = $this->callProtocol($input->toString());
-
         // 戻り値がnullの場合、nullを戻す
         if (is_null($resultMap)) {
             return null;

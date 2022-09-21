@@ -1,6 +1,13 @@
 <?php
 namespace Gineign\GmoPayment\Common;
 
+use Gineign\GmoPayment\Common\GPayException;
+
+use Gineign\GmoPayment\Common\ConnectUrlMap;
+
+/*require_once 'com/gmo_pg/client/common/GPayException.php';
+require_once 'com/gmo_pg/client/common/ConnectUrlMap.php';*/
+
 /**
  * <b>リダイレクトページ生成</b>
  *
@@ -67,6 +74,44 @@ class RedirectUtil
         $strPage = str_replace('${PaReq}', $paReq, $strPage);
         $strPage = str_replace('${TermUrl}', $termUrl, $strPage);
         $strPage = str_replace('${MD}', $md, $strPage);
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param string $param リダイレクトURL
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function createSecure2RedirectPage($pagePath, $param, $encode = null)
+    {
+        $redirectUrl = $param;
+
+        if (empty($redirectUrl)) {
+            $this->exception =
+                new GPayException("必須リダイレクトURLに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return null;
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${RedirectUrl}', $redirectUrl, $strPage);
 
         return $strPage;
     }
@@ -171,7 +216,7 @@ class RedirectUtil
         $accessID = $param->getAccessID();
 
         if (
-        empty($accessID)
+            empty($accessID)
         ) {
             $this->exception =
                 new GPayException("必須Webmoneyクイック支払い手続き開始パラメータに値が入っていません。", $this->exception);
@@ -1051,6 +1096,342 @@ class RedirectUtil
         return $strPage;
     }
 
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function famipayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須FamiPay手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('famipayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${FamipayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function epospayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須エポスかんたん決済手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('epospayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${EpospayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function merpayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須メルペイ手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('merpayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${MerpayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function paypayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須PayPay手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('paypayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${PaypayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function paypayAcceptStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須PayPay随時(利用承諾)手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('paypayAcceptStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${PaypayAcceptStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function aupayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須au PAY手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('aupayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${AupayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function rakutenpayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須楽天ペイ手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('rakutenpayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${RakutenpayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
 
     /**
      * リダイレクトページの内容を作成する
@@ -1095,6 +1476,56 @@ class RedirectUtil
         $strPage = str_replace('${BankAccountStartURL}', $url, $strPage);
         $strPage = str_replace('${TranID}', $tranID, $strPage);
         $strPage = str_replace('${Token}', $token, $strPage);
+
+
+        return $strPage;
+    }
+
+    /**
+     * リダイレクトページの内容を作成する
+     *
+     * @param string $pagePath 雛形ページファイルへのパス
+     * @param SbStartInput param    支払手続き開始パラメタ
+     * @param string $encode 雛形ページファイルの文字コード
+     * @reutnr string 雛形htmlの文字列
+     */
+    public function amazonpayStart($pagePath, $param, $encode = null)
+    {
+        $accessID = $param->getAccessID();
+        $token = $param->getToken();
+        $amazonAccessToken = $param->getAmazonAccessToken();
+
+
+        if (
+            empty($accessID) ||
+            empty($token)
+        ) {
+            $this->exception =
+                new GPayException("必須Amazon Pay手続き開始パラメータに値が入っていません。", $this->exception);
+            return null;
+        }
+
+        // 雛形ページファイル読込
+        // ※file_get_contents()はPHP4.3.0以降で動作します。
+        $strPage = file_get_contents($pagePath, true);
+        if (!$strPage) {
+            $this->exception =
+                new GPayException("リダイレクトページの作成に失敗しました。", $this->exception);
+            return mb_convert_encoding("リダイレクトページの作成に失敗しました。", 'SJIS', 'UTF-8');
+        }
+
+        // $encodeが指定されていれば指定文字コードへ変換
+        if (!is_null($encode)) {
+            $strPage = mb_convert_encoding($strPage, $encode, 'EUC-JP,UTF-8,SJIS,ASCII');
+        }
+
+        $urlMap = new ConnectUrlMap();
+        $url = $urlMap->getUrl('amazonpayStart');
+        // 雛形ページ中のパラメータ項目を置き換え
+        $strPage = str_replace('${AmazonpayStartURL}', $url, $strPage);
+        $strPage = str_replace('${AccessID}', $accessID, $strPage);
+        $strPage = str_replace('${Token}', $token, $strPage);
+        $strPage = str_replace('${AmazonAccessToken}', $amazonAccessToken, $strPage);
 
 
         return $strPage;

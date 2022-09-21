@@ -116,6 +116,50 @@ class ParamParser
         return $paramsMap;
     }
 
+        /**
+     * Exec特殊パラメータ文字列解析2
+     * 3DS2.0利用時に実行される想定
+     * @param string $params パラメータ文字列
+     * @return array paramsMap パラメータ文字列の連想配列
+     */
+    public function execSpecialParse2($params)
+    {
+
+        $paramsMap = array();
+
+        // 既知のキー名の配列を定義
+        $keys = array("ACS=", "RedirectUrl=");
+
+        //それぞれのキー名の位置を検出する
+        $positions = array();
+        foreach ($keys as $key) {
+            $position = mb_strpos($params, $key);
+            $positions[$key] = $position;
+        }
+
+        // キー名出現位置でソート
+        asort($positions);
+        //　キー名毎のkeyとvalueのセットを切り取る
+        $startPosition = 0;
+        $endPosition = 0;
+        for ($counter = 0; $counter < count($keys); $counter++) {
+            $startPosition = $endPosition;
+            $endPosition = $positions[$keys[$counter]];
+            if ($endPosition - $startPosition === 0) {
+                // 初回ループはスルー
+                continue;
+            }
+            $value = mb_substr($params, $startPosition, ($endPosition - $startPosition));
+            $this->splitKeyValue($value, $paramsMap);
+        }
+
+        // 最後に残った要素の処理
+        $value = mb_substr($params, $endPosition);
+        $this->splitKeyValue($value, $paramsMap);
+
+        return $paramsMap;
+    }
+
     /**
      * ”key=value”の形式になっている文字列を分割してparamMapに連想配列の要素として登録する。
      * @param string $value

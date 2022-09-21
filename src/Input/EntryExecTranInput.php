@@ -1,6 +1,11 @@
 <?php
-
 namespace Gineign\GmoPayment\Input;
+
+use  Gineign\GmoPayment\Input\EntryTranInput;
+use  Gineign\GmoPayment\Input\ExecTranInput;
+
+/*require_once 'com/gmo_pg/client/input/EntryTranInput.php';
+require_once 'com/gmo_pg/client/input/ExecTranInput.php';*/
 
 /**
  * <b>登録・決済一括実行　入力パラメータクラス</b>
@@ -49,32 +54,12 @@ class EntryExecTranInput
     }
 
     /**
-     * 取引登録入力パラメータ設定
-     *
-     * @param EntryTranInput entryTranInput  取引登録入力パラメータ
-     */
-    public function setEntryTranInput(&$entryTranInput)
-    {
-        $this->entryTranInput = $entryTranInput;
-    }
-
-    /**
      * 決済実行入力パラメータ取得
      * @return ExecTranInput 決済実行時パラメータ
      */
     public function &getExecTranInput()
     {
         return $this->execTranInput;
-    }
-
-    /**
-     * 決済実行入力パラメータ設定
-     *
-     * @param ExecTranInput  決済実行入力パラメータ
-     */
-    public function setExecTranInput(&$execTranInput)
-    {
-        $this->execTranInput = $execTranInput;
     }
 
     /**
@@ -156,6 +141,24 @@ class EntryExecTranInput
     public function getTdTenantName()
     {
         return $this->entryTranInput->getTdTenantName();
+    }
+
+    /**
+     * 3DS2.0非対応時取り扱い取得
+     * @return string 3DS2.0非対応時取り扱い
+     */
+    public function getTds2Type()
+    {
+        return $this->entryTranInput->getTds2Type();
+    }
+
+    /**
+     * 3DS必須タイプ
+     * @return string 3DS必須タイプ
+     */
+    public function getTdRequired()
+    {
+        return $this->entryTranInput->getTdRequired();
     }
 
     /**
@@ -339,6 +342,484 @@ class EntryExecTranInput
     }
 
     /**
+     * 加盟店戻りURL取得
+     * @return string 加盟店戻りURL
+     */
+    public function getRetUrl()
+    {
+        return $this->execTranInput->getRetUrl();
+    }
+
+    /**
+     * モバイルアプリモード取得
+     * @return string モバイルアプリモード
+     */
+    public function getAppMode()
+    {
+        return $this->execTranInput->getAppMode();
+    }
+
+        /**
+     * 3DS2.0 authentication challenge request type
+     */
+    public function getTds2ChallengeIndType()
+    {
+        return $this->execTranInput->getTds2ChallengeIndType();
+    }
+
+    /**
+     * コールバック方法取得
+     * @return string コールバック方法
+     */
+    public function getCallbackType()
+    {
+        return $this->execTranInput->getCallbackType();
+    }
+
+    /**
+     * カード会員最終更新日取得
+     * @return string カード会員最終更新日
+     */
+    public function getTds2ChAccChange()
+    {
+        return $this->execTranInput->getTds2ChAccChange();
+    }
+
+    /**
+     * カード会員作成日取得
+     * @return string カード会員作成日
+     */
+    public function getTds2ChAccDate()
+    {
+        return $this->execTranInput->getTds2ChAccDate();
+    }
+
+    /**
+     * カード会員パスワード変更日取得
+     * @return string カード会員パスワード変更日
+     */
+    public function getTds2ChAccPwChange()
+    {
+        return $this->execTranInput->getTds2ChAccPwChange();
+    }
+
+    /**
+     * 過去6ヶ月間の購入回数取得
+     * @return integer 過去6ヶ月間の購入回数
+     */
+    public function getTds2NbPurchaseAccount()
+    {
+        return $this->execTranInput->getTds2NbPurchaseAccount();
+    }
+
+    /**
+     * カード登録日取得
+     * @return string カード登録日
+     */
+    public function getTds2PaymentAccAge()
+    {
+        return $this->execTranInput->getTds2PaymentAccAge();
+    }
+
+    /**
+     * 過去24時間のカード追加の試行回数取得
+     * @return integer 過去24時間のカード追加の試行回数
+     */
+    public function getTds2ProvisionAttemptsDay()
+    {
+        return $this->execTranInput->getTds2ProvisionAttemptsDay();
+    }
+
+    /**
+     * 配送先住所の初回使用日取得
+     * @return string 配送先住所の初回使用日
+     */
+    public function getTds2ShipAddressUsage()
+    {
+        return $this->execTranInput->getTds2ShipAddressUsage();
+    }
+
+    /**
+     * カード会員名と配送先名の一致/不一致取得
+     * @return string カード会員名と配送先名の一致/不一致
+     */
+    public function getTds2ShipNameInd()
+    {
+        return $this->execTranInput->getTds2ShipNameInd();
+    }
+
+    /**
+     * カード会員の不審行為情報取得
+     * @return string カード会員の不審行為情報
+     */
+    public function getTds2SuspiciousAccActivity()
+    {
+        return $this->execTranInput->getTds2SuspiciousAccActivity();
+    }
+
+    /**
+     * 過去24時間の取引回数取得
+     * @return integer 過去24時間の取引回数
+     */
+    public function getTds2TxnActivityDay()
+    {
+        return $this->execTranInput->getTds2TxnActivityDay();
+    }
+
+    /**
+     * 前年の取引回数取得
+     * @return integer 前年の取引回数
+     */
+    public function getTds2TxnActivityYear()
+    {
+        return $this->execTranInput->getTds2TxnActivityYear();
+    }
+
+    /**
+     * ログイン証跡取得
+     * @return string ログイン証跡
+     */
+    public function getTds2ThreeDSReqAuthData()
+    {
+        return $this->execTranInput->getTds2ThreeDSReqAuthData();
+    }
+
+    /**
+     * ログイン方法取得
+     * @return string ログイン方法
+     */
+    public function getTds2ThreeDSReqAuthMethod()
+    {
+        return $this->execTranInput->getTds2ThreeDSReqAuthMethod();
+    }
+
+    /**
+     * ログイン日時取得
+     * @return string ログイン日時
+     */
+    public function getTds2ThreeDSReqAuthTimestamp()
+    {
+        return $this->execTranInput->getTds2ThreeDSReqAuthTimestamp();
+    }
+
+    /**
+     * 請求先住所と配送先住所の一致/不一致取得
+     * @return string 請求先住所と配送先住所の一致/不一致
+     */
+    public function getTds2AddrMatch()
+    {
+        return $this->execTranInput->getTds2AddrMatch();
+    }
+
+    /**
+     * 請求先住所の都市取得
+     * @return string 請求先住所の都市
+     */
+    public function getTds2BillAddrCity()
+    {
+        return $this->execTranInput->getTds2BillAddrCity();
+    }
+
+    /**
+     * 請求先住所の国番号取得
+     * @return string 請求先住所の国番号
+     */
+    public function getTds2BillAddrCountry()
+    {
+        return $this->execTranInput->getTds2BillAddrCountry();
+    }
+
+    /**
+     * 請求先住所の区域部分の１行目取得
+     * @return string 請求先住所の区域部分の１行目
+     */
+    public function getTds2BillAddrLine1()
+    {
+        return $this->execTranInput->getTds2BillAddrLine1();
+    }
+
+    /**
+     * 請求先住所の区域部分の２行目取得
+     * @return string 請求先住所の区域部分の２行目
+     */
+    public function getTds2BillAddrLine2()
+    {
+        return $this->execTranInput->getTds2BillAddrLine2();
+    }
+
+    /**
+     * 請求先住所の区域部分の３行目取得
+     * @return string 請求先住所の区域部分の３行目
+     */
+    public function getTds2BillAddrLine3()
+    {
+        return $this->execTranInput->getTds2BillAddrLine3();
+    }
+
+    /**
+     * 請求先住所の郵便番号取得
+     * @return string 請求先住所の郵便番号
+     */
+    public function getTds2BillAddrPostCode()
+    {
+        return $this->execTranInput->getTds2BillAddrPostCode();
+    }
+
+    /**
+     * 請求先住所の州または都道府県番号取得
+     * @return string 請求先住所の州または都道府県番号
+     */
+    public function getTds2BillAddrState()
+    {
+        return $this->execTranInput->getTds2BillAddrState();
+    }
+
+    /**
+     * カード会員のメールアドレス取得
+     * @return string カード会員のメールアドレス
+     */
+    public function getTds2Email()
+    {
+        return $this->execTranInput->getTds2Email();
+    }
+
+    /**
+     * 自宅電話の国コード取得
+     * @return string 自宅電話の国コード
+     */
+    public function getTds2HomePhoneCC()
+    {
+        return $this->execTranInput->getTds2HomePhoneCC();
+    }
+
+    /**
+     * 自宅電話番号取得
+     * @return string 自宅電話番号
+     */
+    public function getTds2HomePhoneSubscriber()
+    {
+        return $this->execTranInput->getTds2HomePhoneSubscriber();
+    }
+
+    /**
+     * 携帯電話の国コード取得
+     * @return string 携帯電話の国コード
+     */
+    public function getTds2MobilePhoneCC()
+    {
+        return $this->execTranInput->getTds2MobilePhoneCC();
+    }
+
+    /**
+     * 携帯電話番号取得
+     * @return string 携帯電話番号
+     */
+    public function getTds2MobilePhoneSubscriber()
+    {
+        return $this->execTranInput->getTds2MobilePhoneSubscriber();
+    }
+
+    /**
+     * 職場電話の国コード取得
+     * @return string 職場電話の国コード
+     */
+    public function getTds2WorkPhoneCC()
+    {
+        return $this->execTranInput->getTds2WorkPhoneCC();
+    }
+
+    /**
+     * 職場電話番号取得
+     * @return string 職場電話番号
+     */
+    public function getTds2WorkPhoneSubscriber()
+    {
+        return $this->execTranInput->getTds2WorkPhoneSubscriber();
+    }
+
+    /**
+     * 配送先住所の都市取得
+     * @return string 配送先住所の都市
+     */
+    public function getTds2ShipAddrCity()
+    {
+        return $this->execTranInput->getTds2ShipAddrCity();
+    }
+
+    /**
+     * 配送先住所の国番号取得
+     * @return string 配送先住所の国番号
+     */
+    public function getTds2ShipAddrCountry()
+    {
+        return $this->execTranInput->getTds2ShipAddrCountry();
+    }
+
+    /**
+     * 配送先住所の区域部分の１行目取得
+     * @return string 配送先住所の区域部分の１行目
+     */
+    public function getTds2ShipAddrLine1()
+    {
+        return $this->execTranInput->getTds2ShipAddrLine1();
+    }
+
+    /**
+     * 配送先住所の区域部分の２行目取得
+     * @return string 配送先住所の区域部分の２行目
+     */
+    public function getTds2ShipAddrLine2()
+    {
+        return $this->execTranInput->getTds2ShipAddrLine2();
+    }
+
+    /**
+     * 配送先住所の区域部分の３行目取得
+     * @return string 配送先住所の区域部分の３行目
+     */
+    public function getTds2ShipAddrLine3()
+    {
+        return $this->execTranInput->getTds2ShipAddrLine3();
+    }
+
+    /**
+     * 配送先住所の郵便番号取得
+     * @return string 配送先住所の郵便番号
+     */
+    public function getTds2ShipAddrPostCode()
+    {
+        return $this->execTranInput->getTds2ShipAddrPostCode();
+    }
+
+    /**
+     * 配送先住所の州または都道府県番号取得
+     * @return string 配送先住所の州または都道府県番号
+     */
+    public function getTds2ShipAddrState()
+    {
+        return $this->execTranInput->getTds2ShipAddrState();
+    }
+
+    /**
+     * 納品先電子メールアドレス取得
+     * @return string 納品先電子メールアドレス
+     */
+    public function getTds2DeliveryEmailAddress()
+    {
+        return $this->execTranInput->getTds2DeliveryEmailAddress();
+    }
+
+    /**
+     * 商品納品時間枠取得
+     * @return string 商品納品時間枠
+     */
+    public function getTds2DeliveryTimeframe()
+    {
+        return $this->execTranInput->getTds2DeliveryTimeframe();
+    }
+
+    /**
+     * プリペイドカードまたはギフトカードの総購入金額取得
+     * @return string プリペイドカードまたはギフトカードの総購入金額
+     */
+    public function getTds2GiftCardAmount()
+    {
+        return $this->execTranInput->getTds2GiftCardAmount();
+    }
+
+    /**
+     * 購入されたプリペイドカードまたはギフトカード の総数取得
+     * @return integer 購入されたプリペイドカードまたはギフトカード の総数
+     */
+    public function getTds2GiftCardCount()
+    {
+        return $this->execTranInput->getTds2GiftCardCount();
+    }
+
+    /**
+     * 購入されたプリペイドカードまたはギフトカードの通貨コード取得
+     * @return string 購入されたプリペイドカードまたはギフトカードの通貨コード
+     */
+    public function getTds2GiftCardCurr()
+    {
+        return $this->execTranInput->getTds2GiftCardCurr();
+    }
+
+    /**
+     * 商品の発売予定日取得
+     * @return string 商品の発売予定日
+     */
+    public function getTds2PreOrderDate()
+    {
+        return $this->execTranInput->getTds2PreOrderDate();
+    }
+
+    /**
+     * 商品の販売時期情報取得
+     * @return string 商品の販売時期情報
+     */
+    public function getTds2PreOrderPurchaseInd()
+    {
+        return $this->execTranInput->getTds2PreOrderPurchaseInd();
+    }
+
+    /**
+     * 商品の注文情報取得
+     * @return string 商品の注文情報
+     */
+    public function getTds2ReorderItemsInd()
+    {
+        return $this->execTranInput->getTds2ReorderItemsInd();
+    }
+
+    /**
+     * 取引の配送方法取得
+     * @return string 取引の配送方法
+     */
+    public function getTds2ShipInd()
+    {
+        return $this->execTranInput->getTds2ShipInd();
+    }
+
+    /**
+     * 継続課金の期限取得
+     * @return string 継続課金の期限
+     */
+    public function getTds2RecurringExpiry()
+    {
+        return $this->execTranInput->getTds2RecurringExpiry();
+    }
+
+    /**
+     * 継続課金の課金最小間隔日数取得
+     * @return integer 継続課金の課金最小間隔日数
+     */
+    public function getTds2RecurringFrequency()
+    {
+        return $this->execTranInput->getTds2RecurringFrequency();
+    }
+
+    /**
+     * 取引登録入力パラメータ設定
+     *
+     * @param EntryTranInput entryTranInput  取引登録入力パラメータ
+     */
+    public function setEntryTranInput(&$entryTranInput)
+    {
+        $this->entryTranInput = $entryTranInput;
+    }
+
+    /**
+     * 決済実行入力パラメータ設定
+     *
+     * @param ExecTranInput  決済実行入力パラメータ
+     */
+    public function setExecTranInput(&$execTranInput)
+    {
+        $this->execTranInput = $execTranInput;
+    }
+
+    /**
      * ショップID設定
      *
      * @param string $shopId
@@ -427,6 +908,26 @@ class EntryExecTranInput
     public function setTdTenantName($tdTenantName)
     {
         $this->entryTranInput->setTdTenantName($tdTenantName);
+    }
+
+    /**
+     * 3DS2.0非対応時取り扱い設定
+     *
+     * @param string $tds2Type
+     */
+    public function setTds2Type($tds2Type)
+    {
+        $this->entryTranInput->setTds2Type($tds2Type);
+    }
+
+    /**
+     * 3DS必須タイプ
+     *
+     * @param string $tdRequired
+     */
+    public function setTdRequired($tdRequired)
+    {
+        $this->entryTranInput->setTdRequired($tdRequired);
     }
 
     /**
@@ -626,6 +1127,514 @@ class EntryExecTranInput
     public function setTokenType($tokenType)
     {
         $this->execTranInput->setTokenType($tokenType);
+    }
+
+    /**
+     * 加盟店戻りURL設定
+     *
+     * @param string $retUrl
+     */
+    public function setRetUrl($retUrl)
+    {
+        $this->execTranInput->setRetUrl($retUrl);
+    }
+
+    /**
+     * モバイルアプリモード設定
+     *
+     * @param string $appMode
+     */
+    public function setAppMode($appMode)
+    {
+        $this->execTranInput->setAppMode($appMode);
+    }
+
+    /**
+     * 3DS2.0 authentication challenge request type
+     */
+    public function setTds2ChallengeIndType($tds2ChallengeIndType)
+    {
+        $this->execTranInput->setTds2ChallengeIndType($tds2ChallengeIndType);
+    }	
+
+    /**
+     * コールバック方法設定
+     *
+     * @param string $callbackType
+     */
+    public function setCallbackType($callbackType)
+    {
+        $this->execTranInput->setCallbackType($callbackType);
+    }
+
+    /**
+     * カード会員最終更新日設定
+     *
+     * @param string $tds2ChAccChange
+     */
+    public function setTds2ChAccChange($tds2ChAccChange)
+    {
+        $this->execTranInput->setTds2ChAccChange($tds2ChAccChange);
+    }
+
+    /**
+     * カード会員作成日設定
+     *
+     * @param string $tds2ChAccDate
+     */
+    public function setTds2ChAccDate($tds2ChAccDate)
+    {
+        $this->execTranInput->setTds2ChAccDate($tds2ChAccDate);
+    }
+
+    /**
+     * カード会員パスワード変更日設定
+     *
+     * @param string $tds2ChAccPwChange
+     */
+    public function setTds2ChAccPwChange($tds2ChAccPwChange)
+    {
+        $this->execTranInput->setTds2ChAccPwChange($tds2ChAccPwChange);
+    }
+
+    /**
+     * 過去6ヶ月間の購入回数設定
+     *
+     * @param integer $tds2NbPurchaseAccount
+     */
+    public function setTds2NbPurchaseAccount($tds2NbPurchaseAccount)
+    {
+        $this->execTranInput->setTds2NbPurchaseAccount($tds2NbPurchaseAccount);
+    }
+
+    /**
+     * カード登録日設定
+     *
+     * @param string $tds2PaymentAccAge
+     */
+    public function setTds2PaymentAccAge($tds2PaymentAccAge)
+    {
+        $this->execTranInput->setTds2PaymentAccAge($tds2PaymentAccAge);
+    }
+
+    /**
+     * 過去24時間のカード追加の試行回数設定
+     *
+     * @param integer $tds2ProvisionAttemptsDay
+     */
+    public function setTds2ProvisionAttemptsDay($tds2ProvisionAttemptsDay)
+    {
+        $this->execTranInput->setTds2ProvisionAttemptsDay($tds2ProvisionAttemptsDay);
+    }
+
+    /**
+     * 配送先住所の初回使用日設定
+     *
+     * @param string $tds2ShipAddressUsage
+     */
+    public function setTds2ShipAddressUsage($tds2ShipAddressUsage)
+    {
+        $this->execTranInput->setTds2ShipAddressUsage($tds2ShipAddressUsage);
+    }
+
+    /**
+     * カード会員名と配送先名の一致/不一致設定
+     *
+     * @param string $tds2ShipNameInd
+     */
+    public function setTds2ShipNameInd($tds2ShipNameInd)
+    {
+        $this->execTranInput->setTds2ShipNameInd($tds2ShipNameInd);
+    }
+
+    /**
+     * カード会員の不審行為情報設定
+     *
+     * @param string $tds2SuspiciousAccActivity
+     */
+    public function setTds2SuspiciousAccActivity($tds2SuspiciousAccActivity)
+    {
+        $this->execTranInput->setTds2SuspiciousAccActivity($tds2SuspiciousAccActivity);
+    }
+
+    /**
+     * 過去24時間の取引回数設定
+     *
+     * @param integer $tds2TxnActivityDay
+     */
+    public function setTds2TxnActivityDay($tds2TxnActivityDay)
+    {
+        $this->execTranInput->setTds2TxnActivityDay($tds2TxnActivityDay);
+    }
+
+    /**
+     * 前年の取引回数設定
+     *
+     * @param integer $tds2TxnActivityYear
+     */
+    public function setTds2TxnActivityYear($tds2TxnActivityYear)
+    {
+        $this->execTranInput->setTds2TxnActivityYear($tds2TxnActivityYear);
+    }
+
+    /**
+     * ログイン証跡設定
+     *
+     * @param string $tds2ThreeDSReqAuthData
+     */
+    public function setTds2ThreeDSReqAuthData($tds2ThreeDSReqAuthData)
+    {
+        $this->execTranInput->setTds2ThreeDSReqAuthData($tds2ThreeDSReqAuthData);
+    }
+
+    /**
+     * ログイン方法設定
+     *
+     * @param string $tds2ThreeDSReqAuthMethod
+     */
+    public function setTds2ThreeDSReqAuthMethod($tds2ThreeDSReqAuthMethod)
+    {
+        $this->execTranInput->setTds2ThreeDSReqAuthMethod($tds2ThreeDSReqAuthMethod);
+    }
+
+    /**
+     * ログイン日時設定
+     *
+     * @param string $tds2ThreeDSReqAuthTimestamp
+     */
+    public function setTds2ThreeDSReqAuthTimestamp($tds2ThreeDSReqAuthTimestamp)
+    {
+        $this->execTranInput->setTds2ThreeDSReqAuthTimestamp($tds2ThreeDSReqAuthTimestamp);
+    }
+
+    /**
+     * 請求先住所と配送先住所の一致/不一致設定
+     *
+     * @param string $tds2AddrMatch
+     */
+    public function setTds2AddrMatch($tds2AddrMatch)
+    {
+        $this->execTranInput->setTds2AddrMatch($tds2AddrMatch);
+    }
+
+    /**
+     * 請求先住所の都市設定
+     *
+     * @param string $tds2BillAddrCity
+     */
+    public function setTds2BillAddrCity($tds2BillAddrCity)
+    {
+        $this->execTranInput->setTds2BillAddrCity($tds2BillAddrCity);
+    }
+
+    /**
+     * 請求先住所の国番号設定
+     *
+     * @param string $tds2BillAddrCountry
+     */
+    public function setTds2BillAddrCountry($tds2BillAddrCountry)
+    {
+        $this->execTranInput->setTds2BillAddrCountry($tds2BillAddrCountry);
+    }
+
+    /**
+     * 請求先住所の区域部分の１行目設定
+     *
+     * @param string $tds2BillAddrLine1
+     */
+    public function setTds2BillAddrLine1($tds2BillAddrLine1)
+    {
+        $this->execTranInput->setTds2BillAddrLine1($tds2BillAddrLine1);
+    }
+
+    /**
+     * 請求先住所の区域部分の２行目設定
+     *
+     * @param string $tds2BillAddrLine2
+     */
+    public function setTds2BillAddrLine2($tds2BillAddrLine2)
+    {
+        $this->execTranInput->setTds2BillAddrLine2($tds2BillAddrLine2);
+    }
+
+    /**
+     * 請求先住所の区域部分の３行目設定
+     *
+     * @param string $tds2BillAddrLine3
+     */
+    public function setTds2BillAddrLine3($tds2BillAddrLine3)
+    {
+        $this->execTranInput->setTds2BillAddrLine3($tds2BillAddrLine3);
+    }
+
+    /**
+     * 請求先住所の郵便番号設定
+     *
+     * @param string $tds2BillAddrPostCode
+     */
+    public function setTds2BillAddrPostCode($tds2BillAddrPostCode)
+    {
+        $this->execTranInput->setTds2BillAddrPostCode($tds2BillAddrPostCode);
+    }
+
+    /**
+     * 請求先住所の州または都道府県番号設定
+     *
+     * @param string $tds2BillAddrState
+     */
+    public function setTds2BillAddrState($tds2BillAddrState)
+    {
+        $this->execTranInput->setTds2BillAddrState($tds2BillAddrState);
+    }
+
+    /**
+     * カード会員のメールアドレス設定
+     *
+     * @param string $tds2Email
+     */
+    public function setTds2Email($tds2Email)
+    {
+        $this->execTranInput->setTds2Email($tds2Email);
+    }
+
+    /**
+     * 自宅電話の国コード設定
+     *
+     * @param string $tds2HomePhoneCC
+     */
+    public function setTds2HomePhoneCC($tds2HomePhoneCC)
+    {
+        $this->execTranInput->setTds2HomePhoneCC($tds2HomePhoneCC);
+    }
+
+    /**
+     * 自宅電話番号設定
+     *
+     * @param string $tds2HomePhoneSubscriber
+     */
+    public function setTds2HomePhoneSubscriber($tds2HomePhoneSubscriber)
+    {
+        $this->execTranInput->setTds2HomePhoneSubscriber($tds2HomePhoneSubscriber);
+    }
+
+    /**
+     * 携帯電話の国コード設定
+     *
+     * @param string $tds2MobilePhoneCC
+     */
+    public function setTds2MobilePhoneCC($tds2MobilePhoneCC)
+    {
+        $this->execTranInput->setTds2MobilePhoneCC($tds2MobilePhoneCC);
+    }
+
+    /**
+     * 携帯電話番号設定
+     *
+     * @param string $tds2MobilePhoneSubscriber
+     */
+    public function setTds2MobilePhoneSubscriber($tds2MobilePhoneSubscriber)
+    {
+        $this->execTranInput->setTds2MobilePhoneSubscriber($tds2MobilePhoneSubscriber);
+    }
+
+    /**
+     * 職場電話の国コード設定
+     *
+     * @param string $tds2WorkPhoneCC
+     */
+    public function setTds2WorkPhoneCC($tds2WorkPhoneCC)
+    {
+        $this->execTranInput->setTds2WorkPhoneCC($tds2WorkPhoneCC);
+    }
+
+    /**
+     * 職場電話番号設定
+     *
+     * @param string $tds2WorkPhoneSubscriber
+     */
+    public function setTds2WorkPhoneSubscriber($tds2WorkPhoneSubscriber)
+    {
+        $this->execTranInput->setTds2WorkPhoneSubscriber($tds2WorkPhoneSubscriber);
+    }
+
+    /**
+     * 配送先住所の都市設定
+     *
+     * @param string $tds2ShipAddrCity
+     */
+    public function setTds2ShipAddrCity($tds2ShipAddrCity)
+    {
+        $this->execTranInput->setTds2ShipAddrCity($tds2ShipAddrCity);
+    }
+
+    /**
+     * 配送先住所の国番号設定
+     *
+     * @param string $tds2ShipAddrCountry
+     */
+    public function setTds2ShipAddrCountry($tds2ShipAddrCountry)
+    {
+        $this->execTranInput->setTds2ShipAddrCountry($tds2ShipAddrCountry);
+    }
+
+    /**
+     * 配送先住所の区域部分の１行目設定
+     *
+     * @param string $tds2ShipAddrLine1
+     */
+    public function setTds2ShipAddrLine1($tds2ShipAddrLine1)
+    {
+        $this->execTranInput->setTds2ShipAddrLine1($tds2ShipAddrLine1);
+    }
+
+    /**
+     * 配送先住所の区域部分の２行目設定
+     *
+     * @param string $tds2ShipAddrLine2
+     */
+    public function setTds2ShipAddrLine2($tds2ShipAddrLine2)
+    {
+        $this->execTranInput->setTds2ShipAddrLine2($tds2ShipAddrLine2);
+    }
+
+    /**
+     * 配送先住所の区域部分の３行目設定
+     *
+     * @param string $tds2ShipAddrLine3
+     */
+    public function setTds2ShipAddrLine3($tds2ShipAddrLine3)
+    {
+        $this->execTranInput->setTds2ShipAddrLine3($tds2ShipAddrLine3);
+    }
+
+    /**
+     * 配送先住所の郵便番号設定
+     *
+     * @param string $tds2ShipAddrPostCode
+     */
+    public function setTds2ShipAddrPostCode($tds2ShipAddrPostCode)
+    {
+        $this->execTranInput->setTds2ShipAddrPostCode($tds2ShipAddrPostCode);
+    }
+
+    /**
+     * 配送先住所の州または都道府県番号設定
+     *
+     * @param string $tds2ShipAddrState
+     */
+    public function setTds2ShipAddrState($tds2ShipAddrState)
+    {
+        $this->execTranInput->setTds2ShipAddrState($tds2ShipAddrState);
+    }
+
+    /**
+     * 納品先電子メールアドレス設定
+     *
+     * @param string $tds2DeliveryEmailAddress
+     */
+    public function setTds2DeliveryEmailAddress($tds2DeliveryEmailAddress)
+    {
+        $this->execTranInput->setTds2DeliveryEmailAddress($tds2DeliveryEmailAddress);
+    }
+
+    /**
+     * 商品納品時間枠設定
+     *
+     * @param string $tds2DeliveryTimeframe
+     */
+    public function setTds2DeliveryTimeframe($tds2DeliveryTimeframe)
+    {
+        $this->execTranInput->setTds2DeliveryTimeframe($tds2DeliveryTimeframe);
+    }
+
+    /**
+     * プリペイドカードまたはギフトカードの総購入金額設定
+     *
+     * @param string $tds2GiftCardAmount
+     */
+    public function setTds2GiftCardAmount($tds2GiftCardAmount)
+    {
+        $this->execTranInput->setTds2GiftCardAmount($tds2GiftCardAmount);
+    }
+
+    /**
+     * 購入されたプリペイドカードまたはギフトカード の総数設定
+     *
+     * @param integer $tds2GiftCardCount
+     */
+    public function setTds2GiftCardCount($tds2GiftCardCount)
+    {
+        $this->execTranInput->setTds2GiftCardCount($tds2GiftCardCount);
+    }
+
+    /**
+     * 購入されたプリペイドカードまたはギフトカードの通貨コード設定
+     *
+     * @param string $tds2GiftCardCurr
+     */
+    public function setTds2GiftCardCurr($tds2GiftCardCurr)
+    {
+        $this->execTranInput->setTds2GiftCardCurr($tds2GiftCardCurr);
+    }
+
+    /**
+     * 商品の発売予定日設定
+     *
+     * @param string $tds2PreOrderDate
+     */
+    public function setTds2PreOrderDate($tds2PreOrderDate)
+    {
+        $this->execTranInput->setTds2PreOrderDate($tds2PreOrderDate);
+    }
+
+    /**
+     * 商品の販売時期情報設定
+     *
+     * @param string $tds2PreOrderPurchaseInd
+     */
+    public function setTds2PreOrderPurchaseInd($tds2PreOrderPurchaseInd)
+    {
+        $this->execTranInput->setTds2PreOrderPurchaseInd($tds2PreOrderPurchaseInd);
+    }
+
+    /**
+     * 商品の注文情報設定
+     *
+     * @param string $tds2ReorderItemsInd
+     */
+    public function setTds2ReorderItemsInd($tds2ReorderItemsInd)
+    {
+        $this->execTranInput->setTds2ReorderItemsInd($tds2ReorderItemsInd);
+    }
+
+    /**
+     * 取引の配送方法設定
+     *
+     * @param string $tds2ShipInd
+     */
+    public function setTds2ShipInd($tds2ShipInd)
+    {
+        $this->execTranInput->setTds2ShipInd($tds2ShipInd);
+    }
+
+    /**
+     * 継続課金の期限設定
+     *
+     * @param string $tds2RecurringExpiry
+     */
+    public function setTds2RecurringExpiry($tds2RecurringExpiry)
+    {
+        $this->execTranInput->setTds2RecurringExpiry($tds2RecurringExpiry);
+    }
+
+    /**
+     * 継続課金の課金最小間隔日数設定
+     *
+     * @param integer $tds2RecurringFrequency
+     */
+    public function setTds2RecurringFrequency($tds2RecurringFrequency)
+    {
+        $this->execTranInput->setTds2RecurringFrequency($tds2RecurringFrequency);
     }
 }
 

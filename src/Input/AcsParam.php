@@ -1,6 +1,7 @@
 <?php
 
 namespace Gineign\GmoPayment\Input;
+
 /**
  * <b>リダイレクトページ生成用パラメータホルダー</b>
  *
@@ -46,6 +47,33 @@ class AcsParam
     }
 
     /**
+     * 取引ID取得
+     * @return string 取引データ
+     */
+    public function getMd()
+    {
+        return $this->md;
+    }
+
+    /**
+     * 3Dセキュア認証要求電文取得
+     * @return string 3Dセキュア認証要求電文
+     */
+    public function getPaReq()
+    {
+        return $this->paReq;
+    }
+
+    /**
+     * 結果受取用URL取得
+     * @return string 結果受け取りURL
+     */
+    public function getTermUrl()
+    {
+        return $this->termUrl;
+    }
+
+    /**
      * ACS（発行元カード会社）URL設定
      *
      * <p>
@@ -60,15 +88,6 @@ class AcsParam
     }
 
     /**
-     * 取引ID取得
-     * @return string 取引データ
-     */
-    public function getMd()
-    {
-        return $this->md;
-    }
-
-    /**
      * 取引ID設定
      *
      * @param string $md 取引ID
@@ -78,14 +97,6 @@ class AcsParam
         $this->md = $md;
     }
 
-    /**
-     * 3Dセキュア認証要求電文取得
-     * @return string 3Dセキュア認証要求電文
-     */
-    public function getPaReq()
-    {
-        return $this->paReq;
-    }
 
     /**
      * 3Dセキュア認証要求電文設定
@@ -101,14 +112,6 @@ class AcsParam
         $this->paReq = $paReq;
     }
 
-    /**
-     * 結果受取用URL取得
-     * @return string 結果受け取りURL
-     */
-    public function getTermUrl()
-    {
-        return $this->termUrl;
-    }
 
     /**
      * 結果受取用URLを設定

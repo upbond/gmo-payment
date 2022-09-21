@@ -1,11 +1,22 @@
 <?php
 namespace Gineign\GmoPayment\Tran;
 
-use Gineign\GmoPayment\Common\Gmopg_Log;
-use Gineign\GmoPayment\Common\RedirectUtil;
-use Gineign\GmoPayment\Input\AcsParam;
-use Gineign\GmoPayment\Input\TdVerifyInput;
 use Gineign\GmoPayment\Output\EntryExecTranOutput;
+use Gineign\GmoPayment\Input\TdVerifyInput;
+use Gineign\GmoPayment\Input\AcsParam;
+use Gineign\GmoPayment\Tran\EntryTran;
+use Gineign\GmoPayment\Tran\ExecTran;
+use Gineign\GmoPayment\Tran\TdVerify;
+use Gineign\GmoPayment\Tran\RedirectUtil;
+use Gineign\GmoPayment\Common\Gmopg_Log;
+
+/*require_once 'com/gmo_pg/client/output/EntryExecTranOutput.php';
+require_once 'com/gmo_pg/client/input/TdVerifyInput.php';
+require_once 'com/gmo_pg/client/input/AcsParam.php';
+require_once 'com/gmo_pg/client/tran/EntryTran.php';
+require_once 'com/gmo_pg/client/tran/ExecTran.php';
+require_once 'com/gmo_pg/client/tran/TdVerify.php';
+require_once 'com/gmo_pg/client/common/RedirectUtil.php';*/
 
 /**
  * <b>取引登録・決済一括実行　実行クラス</b>
@@ -35,6 +46,20 @@ class EntryExecTran
     public function __construct()
     {
         $this->log = new Gmopg_Log(get_class($this));
+    }
+
+    /**
+     * 例外の発生を判定する
+     *
+     * @param mixed $target 判定対象
+     */
+    private function errorTrap(&$target)
+    {
+        if (is_null($target->getException())) {
+            return false;
+        }
+        $this->exception = $target->getException();
+        return true;
     }
 
     /**
@@ -116,20 +141,6 @@ class EntryExecTran
         $this->errorTrap($execTran);
 
         return $output;
-    }
-
-    /**
-     * 例外の発生を判定する
-     *
-     * @param mixed $target 判定対象
-     */
-    private function errorTrap(&$target)
-    {
-        if (is_null($target->getException())) {
-            return false;
-        }
-        $this->exception = $target->getException();
-        return true;
     }
 
     /**
